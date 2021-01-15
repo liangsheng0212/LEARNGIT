@@ -18,7 +18,7 @@
 #include "ham-monitor.h"
 #include "log.h"
 
-extern int ham_client_init(char *file);
+//程序中对于Log前面都加了"<my-test>"，程序运行可以sloginfo | grep my-test，查看与此程序有关log
 
 static void *Test_Ham_Hbeat(void *arg)
 {
@@ -33,6 +33,7 @@ static void *Test_Ham_Hbeat(void *arg)
 	return NULL;
 }
 
+//命令行参数为发送Ham_HeartBeat的间隔，1为1秒
 int main(int argc, char *argv[])
 {
 	if(argc>2)
@@ -48,6 +49,7 @@ int main(int argc, char *argv[])
 		return EXIT_FAILURE;
 	}
 	LOGINF("<my-test>pid:%d",getpid());
+	//设置监测心跳间隔为2s
 	if(!register_ham_self_restart_with_heartbeat("ham-client-test","/TEST/ham-client-test","/emmc/svp/etc/reset-via-mcu.sh",1,2,2000))
 	{
 		pthread_create(NULL,NULL,Test_Ham_Hbeat,(void *)&i);
